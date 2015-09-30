@@ -1,2 +1,2 @@
-# 07-Journal
+# 08-Journal
 Repository for journal project
