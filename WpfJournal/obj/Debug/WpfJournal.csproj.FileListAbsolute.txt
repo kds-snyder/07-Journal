@@ -1,0 +1,14 @@
+C:\dev\08-Journal\WpfJournal\bin\Debug\WpfJournal.exe.config
+C:\dev\08-Journal\WpfJournal\bin\Debug\WpfJournal.exe
+C:\dev\08-Journal\WpfJournal\bin\Debug\WpfJournal.pdb
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal.csprojResolveAssemblyReference.cache
+C:\dev\08-Journal\WpfJournal\obj\Debug\MainWindow.g.cs
+C:\dev\08-Journal\WpfJournal\obj\Debug\App.g.cs
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal_MarkupCompile.cache
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal_MarkupCompile.lref
+C:\dev\08-Journal\WpfJournal\obj\Debug\MainWindow.baml
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal.g.resources
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal.Properties.Resources.resources
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal.csproj.GenerateResource.Cache
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal.exe
+C:\dev\08-Journal\WpfJournal\obj\Debug\WpfJournal.pdb
