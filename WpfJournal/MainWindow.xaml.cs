@@ -54,14 +54,22 @@ namespace WpfJournal
             {
                 // Check that row is selected in grid
                 if (dataGrid_JournalEntries.SelectedCells.Count > 0)
-                {                   
+                {
 
                     // Get the entry ID of the selected row, by
                     //  creating a new instance of the JournalEntry class,
                     //   and copying the selected items collection to it 
                     //    (selected items collection must be cast)
+/*
+                    var selectedEntry = dataGrid_JournalEntries.SelectedItems;
+                    foreach (var item in selectedEntry)
+                    {
+                        var rowEntry = item as JournalEntry;
+                        entryID = rowEntry.Id;
+                    }
+*/
                     JournalEntry rowEntry = new JournalEntry();
-                    rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems;
+                    rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
                     entryID = rowEntry.Id;
 
                     // Remove the journal entry according to the entry ID
