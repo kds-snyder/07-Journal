@@ -22,6 +22,8 @@ namespace WpfJournal
     {
         private Journal currentJournal;
         private string journalTitle = "My Journal";
+        private int maxEntryId = 0; // ID to put in journal entries
+
         public MainWindow()
         {
             InitializeComponent();
@@ -40,7 +42,8 @@ namespace WpfJournal
 
             entry.Date = DateTime.Now;
             entry.Title = textBox_title.Text;
-            entry.Id = currentJournal.Entries.Count + 1;
+            ++maxEntryId;
+            entry.Id = maxEntryId;
             entry.Text = textBox_entry.Text;
 
             currentJournal.Entries.Add(entry);
