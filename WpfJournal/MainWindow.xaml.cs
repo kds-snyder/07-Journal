@@ -23,6 +23,7 @@ namespace WpfJournal
         private Journal currentJournal;
         private string journalTitle = "My Journal";
         private int maxEntryId = 0; // ID to put in journal entries
+        private int displayedEntryId = 0; 
 
         public MainWindow()
         {
@@ -72,12 +73,21 @@ namespace WpfJournal
                     }
 */
                     JournalEntry rowEntry = new JournalEntry();
-                    rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
-                    entryID = rowEntry.Id;
+                    if (dataGrid_JournalEntries.SelectedItem != null &&
+                         dataGrid_JournalEntries.SelectedItem is JournalEntry)
+                    {
+                        rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
+                        entryID = rowEntry.Id;
 
-                    // Remove the journal entry according to the entry ID
-                    currentJournal.Entries.Remove
-                        (currentJournal.Entries.Single(i => i.Id == entryID));
+                        // Remove the journal entry according to the entry ID
+                        currentJournal.Entries.Remove
+                            (currentJournal.Entries.Single(i => i.Id == entryID));
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("The entry to delete is empty");
+                    }
                 }
                 else
                 {
@@ -99,10 +109,18 @@ namespace WpfJournal
             }
         }
 
-        // Selected entry changed: display entry at bottom
+        // Entry selection changed in grid: display entry at bottom
         private void dataGrid_JournalEntries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-        }
+            if (dataGrid_JournalEntries.SelectedItem != null &&
+                     dataGrid_JournalEntries.SelectedItem is JournalEntry)
+            {
+                JournalEntry rowEntry = new JournalEntry();
+                rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
+                textBox_title.Text = rowEntry.Title;
+                textBox_entry.Text = rowEntry.Text;
+                displayedEntryId = rowEntry.Id;
+            }
+       }
     }
 }
