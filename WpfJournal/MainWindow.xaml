@@ -9,11 +9,13 @@
     <Grid>
         <DataGrid x:Name="dataGrid_JournalEntries" HorizontalAlignment="Stretch" Margin="10,10,0,0" VerticalAlignment="Top" Height="148" Width="497" SelectionMode="Single" SelectionChanged="dataGrid_JournalEntries_SelectionChanged"/>
         <Label x:Name="label_title" Content="Title:" HorizontalAlignment="Left" Margin="10,158,0,0" VerticalAlignment="Top" Width="91"/>
-        <TextBox x:Name="textBox_title" HorizontalAlignment="Left" Height="23" Margin="10,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="400"/>
+        <TextBox x:Name="textBox_title" HorizontalAlignment="Left" Height="23" Margin="10,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="335"/>
         <Label x:Name="label_entry" Content="Entry:" HorizontalAlignment="Left" Margin="10,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.126,0.259" Width="91"/>
         <TextBox x:Name="textBox_entry" HorizontalAlignment="Left" Height="76" Margin="10,233,0,0" VerticalAlignment="Top" Width="400" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
-        <Button x:Name="button_publish" Content="Publish" HorizontalAlignment="Left" Margin="415,184,0,0" VerticalAlignment="Top" Width="92" Height="35" Click="button_publish_Click"/>
-        <Button x:Name="button_delete" Content="Delete" HorizontalAlignment="Left" Margin="415,237,0,0" VerticalAlignment="Top" Width="92" Height="34" Click="button_delete_Click"/>
+        <Button x:Name="button_add" Content="Add" HorizontalAlignment="Left" Margin="415,184,0,0" VerticalAlignment="Top" Width="92" Height="30" Click="button_add_Click"/>
+        <Button x:Name="button_delete" Content="Delete" HorizontalAlignment="Left" Margin="415,278,0,0" VerticalAlignment="Top" Width="92" Height="30" Click="button_delete_Click"/>
+        <Button x:Name="button_update" Content="Update" HorizontalAlignment="Left" Margin="415,233,0,0" VerticalAlignment="Top" Width="92" Height="30" Click="button_update_Click"/>
+        <Label x:Name="label_entryId" Content="" HorizontalAlignment="Left" Margin="350,158,0,0" VerticalAlignment="Top" Width="60" Height="49"/>
 
     </Grid>
 </Window>

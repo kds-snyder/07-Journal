@@ -23,7 +23,9 @@ namespace WpfJournal
         private Journal currentJournal;
         private string journalTitle = "My Journal";
         private int maxEntryId = 0; // ID to put in journal entries
-        private int displayedEntryId = 0; 
+        private int displayedEntryId = 0; // Displayed entry's ID
+        private int displayedEntryIndex = 0; // Displayed entry's ndex in list of journal entries
+        private string labelEntryIdPrefix = "Entry ID: "; 
 
         public MainWindow()
         {
@@ -36,18 +38,37 @@ namespace WpfJournal
             dataGrid_JournalEntries.ItemsSource = currentJournal.Entries;
         }
 
-        // Publish button clicked: add journal entry
-        private void button_publish_Click(object sender, RoutedEventArgs e)
+        // Add button clicked: add new journal entry, using
+        //  displayed entry data
+        private void button_add_Click(object sender, RoutedEventArgs e)
         {
+            // Create a new entry with all the data
             JournalEntry entry = new JournalEntry();
-
             entry.Date = DateTime.Now;
             entry.Title = textBox_title.Text;
             ++maxEntryId;
             entry.Id = maxEntryId;
             entry.Text = textBox_entry.Text;
 
+            // Add the new entry
             currentJournal.Entries.Add(entry);
+
+            // Update displayed entry info
+            updateDisplayedInfo(entry);
+       }
+
+        // Update button clicked: update entry data       //  
+        private void button_update_Click(object sender, RoutedEventArgs e)
+        {
+            // Update date/time, title, and text
+            currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
+            currentJournal.Entries[displayedEntryIndex].Title =
+                                                textBox_title.Text;
+            currentJournal.Entries[displayedEntryIndex].Text =
+                                                textBox_entry.Text;
+
+            // Refresh the data grid
+            dataGrid_JournalEntries.Items.Refresh();
         }
 
         // Delete button clicked: delete entry
@@ -83,6 +104,8 @@ namespace WpfJournal
                         currentJournal.Entries.Remove
                             (currentJournal.Entries.Single(i => i.Id == entryID));
 
+                        // Clear the displayed entry data
+                        clearDisplayedData();
                     }
                     else
                     {
@@ -109,18 +132,55 @@ namespace WpfJournal
             }
         }
 
-        // Entry selection changed in grid: display entry at bottom
+        // Entry selection changed in grid: display entry data
         private void dataGrid_JournalEntries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (dataGrid_JournalEntries.SelectedItem != null &&
+          if (dataGrid_JournalEntries.SelectedItem != null &&
                      dataGrid_JournalEntries.SelectedItem is JournalEntry)
             {
+                // Display entry data of selected  row
                 JournalEntry rowEntry = new JournalEntry();
                 rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
                 textBox_title.Text = rowEntry.Title;
                 textBox_entry.Text = rowEntry.Text;
-                displayedEntryId = rowEntry.Id;
+
+                // Update displayed entry info
+                updateDisplayedInfo(rowEntry);
+
             }
        }
+
+        // Update displayed entry ID and index
+        private void updateDisplayedInfo (JournalEntry row)
+        {
+            // Display the entry ID
+            label_entryId.Content = labelEntryIdPrefix +
+                Environment.NewLine + row.Id;
+
+            // Save ID and index of displayed entry
+            displayedEntryId = row.Id;
+            displayedEntryIndex =
+              currentJournal.Entries.IndexOf
+                (currentJournal.Entries.Single(i => i.Id == displayedEntryId));
+        }
+
+        // Clear displayed entry data
+        private void clearDisplayedData()
+        {
+            // Clear displayed text and title
+            textBox_title.Text = "";
+            textBox_entry.Text = "";
+            
+            // Clear the displayed entry ID
+            label_entryId.Content = "";
+
+            // Reset ID and index of displayed entry
+            displayedEntryId = 0;
+            displayedEntryIndex =0;
+            
+
+        }
+
+
     }
 }
