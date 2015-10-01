@@ -94,16 +94,19 @@ namespace WpfJournal
                         entryID = rowEntry.Id;
                     }
 */
-                    JournalEntry rowEntry = new JournalEntry();
+/*                    JournalEntry rowEntry = new JournalEntry();
                     if (dataGrid_JournalEntries.SelectedItem != null &&
                          dataGrid_JournalEntries.SelectedItem is JournalEntry)
+                         */
+                    if (displayedEntryId > 0)
                     {
-                        rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
-                        entryID = rowEntry.Id;
+//                        rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
+ //                       entryID = rowEntry.Id;
 
                         // Remove the journal entry that corresponds to the entry ID
                         currentJournal.Entries.Remove
-                            (currentJournal.Entries.Single(i => i.Id == entryID));
+                              //(currentJournal.Entries.Single(i => i.Id == entryID));
+                              (currentJournal.Entries.Single(i => i.Id == displayedEntryId));
 
                         // Clear the displayed entry data
                         clearDisplayedData();
@@ -139,7 +142,7 @@ namespace WpfJournal
           if (dataGrid_JournalEntries.SelectedItem != null &&
                      dataGrid_JournalEntries.SelectedItem is JournalEntry)
             {
-                // Display entry data of selected  row
+                // Display entry data of selected row
                 JournalEntry rowEntry = new JournalEntry();
                 rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItem;
                 textBox_title.Text = rowEntry.Title;
