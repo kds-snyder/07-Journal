@@ -43,45 +43,19 @@ namespace WpfJournal
         //  displayed entry data
         private void button_add_Click(object sender, RoutedEventArgs e)
         {
-            // Create a new entry with all the data
-            JournalEntry entry = new JournalEntry();
-            entry.Date = DateTime.Now;
-            entry.Title = textBox_title.Text;
-            ++maxEntryId;
-            entry.Id = maxEntryId;
-            entry.Text = textBox_entry.Text;
+            addEntry();
 
-            // Add the new entry
-            currentJournal.Entries.Add(entry);
-
-            // Update displayed entry info
-            updateDisplayedInfo(entry);
        }
 
-        // Update button clicked: update entry data       
+        // Update button clicked: update entry data              
         private void button_update_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (displayedEntryId > 0)
             {
-                if (displayedEntryId > 0)
-                {
-                    // Update date/time, title, and text
-                    currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
-                    currentJournal.Entries[displayedEntryIndex].Title =
-                                                        textBox_title.Text;
-                    currentJournal.Entries[displayedEntryIndex].Text =
-                                                        textBox_entry.Text;
+                updateEntry();
+            }
 
-                    // Refresh the data grid
-                    dataGrid_JournalEntries.Items.Refresh();
-                }
-            }
-            catch (Exception except)
-            {
-                MessageBox.Show("An error occurred when updating entry: "
-                             + except.Message);
-            }
-        }
+         }
 
         // Delete button clicked: delete entry
         private void button_delete_Click(object sender, RoutedEventArgs e)
@@ -119,14 +93,25 @@ namespace WpfJournal
         }
 
         // Entry selection changed in grid: display entry data
+        // If the displayed data has changed, offer chance to save it
         private void dataGrid_JournalEntries_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+          // Check that non-empty row has been selected
           if (dataGrid_JournalEntries.SelectedItem != null &&
                      dataGrid_JournalEntries.SelectedItem is JournalEntry)
             {
-                // Display entry data of selected row
+                // Get selected row
                 JournalEntry rowEntry = new JournalEntry();
                 rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItem;
+
+                // Before displaying selected row, 
+                //   save displayed data if it has changed
+                if (displayedEntryChanged)
+                {
+                    SaveChanges();
+                }
+
+                // Display entry data of selected row
                 textBox_title.Text = rowEntry.Title;
                 textBox_entry.Text = rowEntry.Text;
 
@@ -148,7 +133,82 @@ namespace WpfJournal
         {
             displayedEntryChanged = true;
         }
-         
+
+        // Offer chance to save displayed entry data, 
+        //  updating if it is an existing entry, otherwise adding it        
+        private void SaveChanges()
+        {
+            if (displayedEntryId > 0)
+            {
+                MessageBoxResult saveChangesResult =
+                  MessageBox.Show("Entry ID " + displayedEntryId +
+                  " has changed; update it before displaying selected entry?",
+                       "Update changed entry?", MessageBoxButton.YesNo);
+                if (saveChangesResult == MessageBoxResult.Yes)
+                {
+                    updateEntry();
+                }
+            }
+            else
+            {
+                MessageBoxResult saveChangesResult = MessageBox.Show
+               ("Entry data has changed; save as new entry before displaying selected entry?",
+                     "Save new entry?", MessageBoxButton.YesNo);
+                if (saveChangesResult == MessageBoxResult.Yes)
+                {
+                    addEntry();
+                }
+            }
+        }   
+
+        // Add a new entry with the displayed data
+        private void addEntry()
+        {
+            try
+            {
+                // Create a new entry with all the data
+                JournalEntry entry = new JournalEntry();
+                entry.Date = DateTime.Now;
+                entry.Title = textBox_title.Text;
+                ++maxEntryId;
+                entry.Id = maxEntryId;
+                entry.Text = textBox_entry.Text;
+
+                // Add the new entry
+                currentJournal.Entries.Add(entry);
+
+                // Update displayed entry info
+                updateDisplayedInfo(entry);
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show("An error occurred when adding entry: "
+                             + except.Message);
+            }
+        }
+
+        // Update entry, using displayed entry data
+        private void updateEntry()
+        {
+            try
+            {
+                // Update date/time, title, and text
+                currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
+                currentJournal.Entries[displayedEntryIndex].Title =
+                                                    textBox_title.Text;
+                currentJournal.Entries[displayedEntryIndex].Text =
+                                                    textBox_entry.Text;
+
+                // Refresh the data grid
+                dataGrid_JournalEntries.Items.Refresh();
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show("An error occurred when updating entry: "
+                             + except.Message);
+
+            }
+        }
 
         // Update displayed entry ID and index
         private void updateDisplayedInfo (JournalEntry row)
@@ -170,7 +230,8 @@ namespace WpfJournal
             }
             catch (Exception except)
             {
-                MessageBox.Show("An error occurred when deleting entry: "
+                MessageBox.Show
+                    ("An error occurred when updating displayed entry information: "
                      + except.Message);
             }
 
