@@ -61,52 +61,42 @@ namespace WpfJournal
         // Update button clicked: update entry data       
         private void button_update_Click(object sender, RoutedEventArgs e)
         {
-            if (displayedEntryId > 0)
+            try
             {
-                // Update date/time, title, and text
-                currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
-                currentJournal.Entries[displayedEntryIndex].Title =
-                                                    textBox_title.Text;
-                currentJournal.Entries[displayedEntryIndex].Text =
-                                                    textBox_entry.Text;
+                if (displayedEntryId > 0)
+                {
+                    // Update date/time, title, and text
+                    currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
+                    currentJournal.Entries[displayedEntryIndex].Title =
+                                                        textBox_title.Text;
+                    currentJournal.Entries[displayedEntryIndex].Text =
+                                                        textBox_entry.Text;
 
-                // Refresh the data grid
-                dataGrid_JournalEntries.Items.Refresh();
+                    // Refresh the data grid
+                    dataGrid_JournalEntries.Items.Refresh();
+                }
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show("An error occurred when updating entry: "
+                             + except.Message);
             }
         }
 
         // Delete button clicked: delete entry
         private void button_delete_Click(object sender, RoutedEventArgs e)
         {
-            int entryID = 0;
             try
             {
-                // Check that row is selected in grid
+                // Check that row is selected in grid,
+                //  and that entry is not empty
                 if (dataGrid_JournalEntries.SelectedCells.Count > 0)
                 {
-
-                    // Get the entry ID of the selected row
-/*
-                    var selectedEntry = dataGrid_JournalEntries.SelectedItems;
-                    foreach (var item in selectedEntry)
-                    {
-                        var rowEntry = item as JournalEntry;
-                        entryID = rowEntry.Id;
-                    }
-*/
-/*                    JournalEntry rowEntry = new JournalEntry();
-                    if (dataGrid_JournalEntries.SelectedItem != null &&
-                         dataGrid_JournalEntries.SelectedItem is JournalEntry)
-                         */
                     if (displayedEntryId > 0)
                     {
-//                        rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
- //                       entryID = rowEntry.Id;
-
-                        // Remove the journal entry that corresponds to the entry ID
-                        currentJournal.Entries.Remove
-                              //(currentJournal.Entries.Single(i => i.Id == entryID));
-                              (currentJournal.Entries.Single(i => i.Id == displayedEntryId));
+                        // Remove the journal entry that corresponds to 
+                        //  the displayed entry index
+                        currentJournal.Entries.RemoveAt(displayedEntryIndex);
 
                         // Clear the displayed entry data
                         clearDisplayedData();
@@ -123,16 +113,8 @@ namespace WpfJournal
             }
             catch (Exception except)
             {
-                if (entryID > 0)
-                {
-                    MessageBox.Show("An error occurred when deleting entry ID "
-                             + entryID + ": " + except.Message);
-                }
-                else
-                {
-                    MessageBox.Show("An error occurred when deleting entry: "
-                             + except.Message);
-                }
+                MessageBox.Show("An error occurred when deleting entry: "
+                             + except.Message);                
             }
         }
 
@@ -150,7 +132,6 @@ namespace WpfJournal
 
                 // Update displayed entry info
                 updateDisplayedInfo(rowEntry);
-
             }
        }
 
@@ -172,19 +153,28 @@ namespace WpfJournal
         // Update displayed entry ID and index
         private void updateDisplayedInfo (JournalEntry row)
         {
-            // Display the entry ID
-            label_entryId.Content = labelEntryIdPrefix +
-                Environment.NewLine + row.Id;
+            try
+            {
+                // Display the entry ID
+                label_entryId.Content = labelEntryIdPrefix +
+                    Environment.NewLine + row.Id;
 
-            // Save ID and index of displayed entry
-            displayedEntryId = row.Id;
-            displayedEntryIndex =
-              currentJournal.Entries.IndexOf
-                (currentJournal.Entries.Single(i => i.Id == displayedEntryId));
+                // Save ID and index of displayed entry
+                displayedEntryId = row.Id;
+                displayedEntryIndex =
+                  currentJournal.Entries.IndexOf
+                    (currentJournal.Entries.Single(i => i.Id == displayedEntryId));
 
-            // Reset indication that displayed entry has changed
-            displayedEntryChanged = false;
-         }
+                // Reset indication that displayed entry has changed
+                displayedEntryChanged = false;
+            }
+            catch (Exception except)
+            {
+                MessageBox.Show("An error occurred when deleting entry: "
+                     + except.Message);
+            }
+
+        }
 
         // Clear displayed entry data
         private void clearDisplayedData()
