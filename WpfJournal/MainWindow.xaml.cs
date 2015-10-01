@@ -25,7 +25,8 @@ namespace WpfJournal
         private int maxEntryId = 0; // ID to put in journal entries
         private int displayedEntryId = 0; // Displayed entry's ID
         private int displayedEntryIndex = 0; // Displayed entry's ndex in list of journal entries
-        private string labelEntryIdPrefix = "Entry ID: "; 
+        private string labelEntryIdPrefix = "Entry ID: ";
+        private bool displayedEntryChanged = false;
 
         public MainWindow()
         {
@@ -57,18 +58,21 @@ namespace WpfJournal
             updateDisplayedInfo(entry);
        }
 
-        // Update button clicked: update entry data       //  
+        // Update button clicked: update entry data       
         private void button_update_Click(object sender, RoutedEventArgs e)
         {
-            // Update date/time, title, and text
-            currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
-            currentJournal.Entries[displayedEntryIndex].Title =
-                                                textBox_title.Text;
-            currentJournal.Entries[displayedEntryIndex].Text =
-                                                textBox_entry.Text;
+            if (displayedEntryId > 0)
+            {
+                // Update date/time, title, and text
+                currentJournal.Entries[displayedEntryIndex].Date = DateTime.Now;
+                currentJournal.Entries[displayedEntryIndex].Title =
+                                                    textBox_title.Text;
+                currentJournal.Entries[displayedEntryIndex].Text =
+                                                    textBox_entry.Text;
 
-            // Refresh the data grid
-            dataGrid_JournalEntries.Items.Refresh();
+                // Refresh the data grid
+                dataGrid_JournalEntries.Items.Refresh();
+            }
         }
 
         // Delete button clicked: delete entry
@@ -81,10 +85,7 @@ namespace WpfJournal
                 if (dataGrid_JournalEntries.SelectedCells.Count > 0)
                 {
 
-                    // Get the entry ID of the selected row, by
-                    //  creating a new instance of the JournalEntry class,
-                    //   and copying the selected items collection to it 
-                    //    (selected items collection must be cast)
+                    // Get the entry ID of the selected row
 /*
                     var selectedEntry = dataGrid_JournalEntries.SelectedItems;
                     foreach (var item in selectedEntry)
@@ -100,7 +101,7 @@ namespace WpfJournal
                         rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
                         entryID = rowEntry.Id;
 
-                        // Remove the journal entry according to the entry ID
+                        // Remove the journal entry that corresponds to the entry ID
                         currentJournal.Entries.Remove
                             (currentJournal.Entries.Single(i => i.Id == entryID));
 
@@ -140,7 +141,7 @@ namespace WpfJournal
             {
                 // Display entry data of selected  row
                 JournalEntry rowEntry = new JournalEntry();
-                rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItems[0];
+                rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItem;
                 textBox_title.Text = rowEntry.Title;
                 textBox_entry.Text = rowEntry.Text;
 
@@ -149,6 +150,21 @@ namespace WpfJournal
 
             }
        }
+
+        // Displayed entry title has changed: 
+        //   set indication that displayed entry has changed
+        private void textBox_title_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            displayedEntryChanged = true;
+        }
+
+        // Displayed entry text has changed: 
+        //   set indication that displayed entry has changed
+        private void textBox_entry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            displayedEntryChanged = true;
+        }
+         
 
         // Update displayed entry ID and index
         private void updateDisplayedInfo (JournalEntry row)
@@ -162,7 +178,10 @@ namespace WpfJournal
             displayedEntryIndex =
               currentJournal.Entries.IndexOf
                 (currentJournal.Entries.Single(i => i.Id == displayedEntryId));
-        }
+
+            // Reset indication that displayed entry has changed
+            displayedEntryChanged = false;
+         }
 
         // Clear displayed entry data
         private void clearDisplayedData()
@@ -177,8 +196,9 @@ namespace WpfJournal
             // Reset ID and index of displayed entry
             displayedEntryId = 0;
             displayedEntryIndex =0;
-            
 
+            // Reset indication that displayed entry has changed
+            displayedEntryChanged = false;
         }
 
 
