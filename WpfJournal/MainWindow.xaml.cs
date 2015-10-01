@@ -68,12 +68,21 @@ namespace WpfJournal
                 {
                     if (displayedEntryId > 0)
                     {
-                        // Remove the journal entry that corresponds to 
-                        //  the displayed entry index
-                        currentJournal.Entries.RemoveAt(displayedEntryIndex);
+                        // Prompt for confirmation before deleting
+                        MessageBoxResult deleteConfirm =
+                            MessageBox.Show
+                             ("Are you sure you want to delete entry ID " 
+                               + displayedEntryId + "?",
+                               "Confirm deletion", MessageBoxButton.YesNo);
+                        if (deleteConfirm == MessageBoxResult.Yes)
+                        {
+                            // Remove the journal entry that corresponds to 
+                            //  the displayed entry index
+                            currentJournal.Entries.RemoveAt(displayedEntryIndex);
 
-                        // Clear the displayed entry data
-                        clearDisplayedData();
+                            // Clear the displayed entry data
+                            clearDisplayedData();
+                        }                       
                     }
                     else
                     {
@@ -99,7 +108,7 @@ namespace WpfJournal
           // Check that non-empty row has been selected
           if (dataGrid_JournalEntries.SelectedItem != null &&
                      dataGrid_JournalEntries.SelectedItem is JournalEntry)
-            {
+           {
                 // Get selected row
                 JournalEntry rowEntry = new JournalEntry();
                 rowEntry = (JournalEntry)dataGrid_JournalEntries.SelectedItem;
